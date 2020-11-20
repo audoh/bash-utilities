@@ -1,4 +1,4 @@
-#!bash
+#!/bin/bash
 
 # Script for managing default gateways using "route"
 # Usage: gw [interface [gateway]]
