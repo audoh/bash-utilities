@@ -1,5 +1,11 @@
 #!bash
 
+# Script for managing default gateways using "route"
+# Usage: gw [interface [gateway]]
+# With no args, gets all default gateways for all interfaces.
+# With interface, gets all route entries for that interface only.
+# With interface & gateway address, deletes all route entries for that interface, adds the gateway address for that interface and gets the resulting route entry.
+
 gateways=
 if [ $1 ]
 then
