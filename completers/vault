@@ -1,0 +1,3 @@
+#!/bin/bash
+
+compgen -W "genkey encrypt decrypt" "$1"
