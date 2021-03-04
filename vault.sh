@@ -1,9 +1,8 @@
 #!/bin/bash
 
 genkey() {
-  out="$1"
-  entropy="${2:-1024}"
-  openssl rand $entropy > $out
+  entropy="${1:-1024}"
+  openssl rand $entropy
 }
 
 encrypt() {
