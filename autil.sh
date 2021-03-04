@@ -3,6 +3,7 @@
 path=${BASH_SOURCE[0]}
 file=`basename -- "$path"`
 dir="$( cd "$( dirname "$path" )" >/dev/null 2>&1 && pwd )"
+scriptdir="$dir/utils"
 script="$1"
 shift
 
@@ -19,12 +20,12 @@ handle_err() {
       if [ $line == $file ]; then
         continue
       fi
-      echo ${line%.sh} >&2
+      echo $line >&2
     done
     exit 1
   fi
 }
 
 trap 'handle_err $?' ERR
-$dir/$script.sh $*
+"$scriptdir/$script" $*
 trap - ERR
