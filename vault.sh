@@ -1,3 +1,5 @@
+#!/bin/bash
+
 genkey() {
   out="$1"
   entropy="${2:-1024}"
