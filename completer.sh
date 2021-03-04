@@ -11,7 +11,11 @@ _autil() {
     COMPREPLY=($(ls $script_dir | grep "^$cur"))
   else
     # defer to completer script for name
-    COMPREPLY=($("$dir/completers/$prev" "$cur"))
+    completer="${COMP_WORDS[1]}"
+    COMPREPLY=($( \
+      "$dir/completers/$completer" \
+      $COMP_CWORD ${COMP_WORDS[@]}
+    ))
   fi
 }
 

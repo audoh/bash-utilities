@@ -1,3 +1,7 @@
 #!/bin/bash
 
-compgen -W "genkey encrypt decrypt" "$1"
+comp_cword="$1"
+shift;
+comp_words=( "$@" )
+cur=${comp_words[comp_cword]}
+compgen -W "genkey encrypt decrypt" "$cur"
