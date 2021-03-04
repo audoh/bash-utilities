@@ -14,7 +14,6 @@ fi
 handle_err() {
   code=$1
   if [ $code -eq 127 ]; then
-    echo $file: unrecognised command: $script >&2
     echo valid commands: >&2
     ls $dir | grep .sh | while IFS= read -r line; do
       if [ $line == $file ]; then
@@ -27,5 +26,5 @@ handle_err() {
 }
 
 trap 'handle_err $?' ERR
-$dir/$script $* 2> /dev/null
+$dir/$script.sh $*
 trap - ERR
