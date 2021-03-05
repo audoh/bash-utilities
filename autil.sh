@@ -27,5 +27,5 @@ handle_err() {
 }
 
 trap 'handle_err $?' ERR
-"$scriptdir/$script" $*
+"$scriptdir/$script" "$@"
 trap - ERR
