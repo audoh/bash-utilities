@@ -14,7 +14,8 @@ _autil() {
     completer="${COMP_WORDS[1]}"
     COMPREPLY=($( \
       "$dir/completers/$completer" \
-      $COMP_CWORD ${COMP_WORDS[@]}
+      $COMP_CWORD ${COMP_WORDS[@]} \
+      2> /dev/null
     ))
   fi
 }
