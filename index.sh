@@ -1,3 +1,6 @@
 _dir="$(dirname "$BASH_SOURCE")"
-alias autil='bash "$_dir/autil.sh"'
+
+if [ -z `which autil` ]; then
+  alias autil='bash "$_dir/autil.sh"'
+fi
 source "$_dir/completer.sh"
