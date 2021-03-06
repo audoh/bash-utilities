@@ -1,0 +1,10 @@
+#!/bin/bash
+
+comp_cword="$1"
+shift;
+comp_words=( "$@" )
+prev="${comp_words[comp_cword-1]}"
+cur="${comp_words[comp_cword]}"
+if [ "$prev" == "dump" ]; then
+  compgen -W "clean dirty" "$cur"
+fi
