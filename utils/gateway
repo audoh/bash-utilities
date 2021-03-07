@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 # Script for managing default gateways using "route"
 # Usage: gw [interface [gateway]]
