@@ -4,8 +4,21 @@ git remote | while read -r branch; do
   git remote prune $branch
 done
 
-git branch --format "%(refname:short) %(upstream:track)" | while IFS=' ' read -ra line; do
-  if [ "${line[1]}" = "[gone]" ]; then
-    git branch -D "${line[0]}"
+git branch --format "%(refname:short) %(upstream:track)" | while IFS=' ' read -r line; do
+  branch=
+  remote=
+  i=0
+  for part in $line; do
+    if [ "$i" -eq "0" ]; then
+      branch=$part
+    elif [ "$i" -eq "1" ]; then
+      remote=$part
+    else
+      break
+    fi
+    i=`expr $i + 1`
+  done
+  if [ "$remote" = "[gone]" ]; then
+    git branch -D "$branch"
   fi
 done
