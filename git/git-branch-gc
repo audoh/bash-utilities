@@ -1,0 +1,11 @@
+#!/bin/sh
+
+git remote | while read -r branch; do
+  git remote prune $branch
+done
+
+git branch --format "%(refname:short) %(upstream:track)" | while IFS=' ' read -ra line; do
+  if [ "${line[1]}" = "[gone]" ]; then
+    git branch -D "${line[0]}"
+  fi
+done
