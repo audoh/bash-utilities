@@ -4,9 +4,9 @@ _autil_prompt() {
   YELLOW='\033[0;33m'
   PLAIN='\033[0m'
 
-  DEFAULT_FORMAT='\033[0;30m'
-  TIME_FORMAT='\033[0;29m'
-  PATH_FORMAT='\033[01;34m'
+  DEFAULT_FORMAT='\033[1;37m'
+  TIME_FORMAT='\033[1;37m'
+  PATH_FORMAT='\033[1;34m'
 
   _date="[$(date +%H:%M)]"
   _pwd=`pwd`
