@@ -51,5 +51,5 @@ _autil_prompt() {
 }
 
 export VIRTUAL_ENV_DISABLE_PROMPT=1
-PS1='$(_autil_prompt)'
+PROMPT_COMMAND=_autil_prompt
 
