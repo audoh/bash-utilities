@@ -1,7 +1,8 @@
 _autil_prompt() {
   CYAN='\033[0;36m'
   RED='\033[0;31m'
-  YELLOW='\033[1;33m'
+  GREEN='\033[0;32m'
+  YELLOW='\033[0;33m'
   PLAIN='\033[0m'
 
   _date="[$(date +%H:%M)]"
@@ -21,7 +22,7 @@ _autil_prompt() {
       fi
     fi
 
-    git="${colour}(${branch})${PLAIN}"
+    git="(${colour}${branch}${PLAIN})"
   fi
 
   printf "${PLAIN}"
