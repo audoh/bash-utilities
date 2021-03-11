@@ -1,12 +1,12 @@
 _autil_prompt() {
-  CYAN='\033[0;36m'
-  RED='\033[0;31m'
-  YELLOW='\033[0;33m'
-  PLAIN='\033[0m'
+  CYAN='\[\033[0;36m\]'
+  RED='\[\033[0;31m\]'
+  YELLOW='\[\033[0;33m\]'
+  PLAIN='\[\033[0m\]'
 
-  DEFAULT_FORMAT='\033[1;37m'
-  TIME_FORMAT='\033[1;37m'
-  PATH_FORMAT='\033[;35m'
+  DEFAULT_FORMAT='\[\033[1;37m\]'
+  TIME_FORMAT='\[\033[1;37m\]'
+  PATH_FORMAT='\[\033[;35m\]'
 
   _date="[$(date +%H:%M)]"
   _pwd=`pwd`
