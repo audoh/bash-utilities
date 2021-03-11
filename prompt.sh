@@ -1,12 +1,12 @@
 _autil_prompt() {
-  CYAN='\033\[0;36m'
-  RED='\033\[0;31m'
-  YELLOW='\033\[0;33m'
-  PLAIN='\033\[0m'
+  CYAN='\033[0;36m'
+  RED='\033[0;31m'
+  YELLOW='\033[0;33m'
+  PLAIN='\033[0m'
 
-  DEFAULT_FORMAT='\033\[1;37m'
-  TIME_FORMAT='\033\[1;37m'
-  PATH_FORMAT='\033\[;35m'
+  DEFAULT_FORMAT='\033[1;37m'
+  TIME_FORMAT='\033[1;37m'
+  PATH_FORMAT='\033[;35m'
 
   _date="[$(date +%H:%M)]"
   _pwd=`pwd`
@@ -32,22 +32,21 @@ _autil_prompt() {
     virtual_env="(`basename \"$VIRTUAL_ENV\"`)"
   fi
 
-  printf "${DEFAULT_FORMAT}"
+  PS1="${DEFAULT_FORMAT}"
 
-  printf "${TIME_FORMAT}$_date${DEFAULT_FORMAT}"
+  PS1="$PS1${TIME_FORMAT}$_date${DEFAULT_FORMAT}"
 
   if [ ! -z "$virtual_env" ]; then
-    printf " $virtual_env"
+    PS1="$PS1 $virtual_env"
   fi
 
-  printf " ${PATH_FORMAT}${_pwd/$HOME/\~}${DEFAULT_FORMAT}"
+  PS1="$PS1 ${PATH_FORMAT}${_pwd/$HOME/\~}${DEFAULT_FORMAT}"
 
   if [ ! -z "$git" ]; then
-    printf " $git"
+    PS1="$PS1 $git"
   fi
 
-
-  printf " > ${PLAIN}"
+  PS1="$PS1 > ${PLAIN}"
 }
 
 export VIRTUAL_ENV_DISABLE_PROMPT=1
