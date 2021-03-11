@@ -28,15 +28,28 @@ _autil_prompt() {
     git="(${colour}${branch}${DEFAULT_FORMAT})"
   fi
 
+  if [ ! -z $VIRTUAL_ENV ]; then
+    virtual_env="(`basename \"$VIRTUAL_ENV\"`)"
+  fi
+
   printf "${DEFAULT_FORMAT}"
 
   printf "${TIME_FORMAT}$_date${DEFAULT_FORMAT}"
+
+  if [ ! -z "$virtual_env" ]; then
+    printf " $virtual_env"
+  fi
+
   printf " ${PATH_FORMAT}${_pwd/$HOME/\~}${DEFAULT_FORMAT}"
+
   if [ ! -z "$git" ]; then
     printf " $git"
   fi
+
+
   printf " > ${PLAIN}"
 }
 
+export VIRTUAL_ENV_DISABLE_PROMPT=1
 PS1='$(_autil_prompt)'
 
