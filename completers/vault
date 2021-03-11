@@ -5,13 +5,8 @@ shift;
 comp_words=( "$@" )
 prev="${comp_words[comp_cword-1]}"
 cur="${comp_words[comp_cword]}"
-if [ "$prev" == "vault" ]; then
+if [ "$prev" = "vault" ]; then
   compgen -W "genkey encrypt decrypt" "$cur"
-else
-  cmd="${comp_words[2]}"
-  if [ "$cmd" == "encrypt" ] || [ "$cmd" == "decrypt" ]; then
-    if [ "${comp_cword}" -le 4 ]; then
-      compgen -f "$cur"
-    fi
-  fi
+elif [ "$prev" = "encrypt" ] || [ "$prev" = "decrypt"]; then
+  compgen -f "$cur"
 fi
