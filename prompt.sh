@@ -1,9 +1,12 @@
 _autil_prompt() {
   CYAN='\033[0;36m'
   RED='\033[0;31m'
-  GREEN='\033[0;32m'
   YELLOW='\033[0;33m'
   PLAIN='\033[0m'
+
+  DEFAULT_FORMAT='\033[0;30m'
+  TIME_FORMAT='\033[0;30m'
+  PATH_FORMAT='\033[1;38;5;89m'
 
   _date="[$(date +%H:%M)]"
   _pwd=`pwd`
@@ -22,16 +25,17 @@ _autil_prompt() {
       fi
     fi
 
-    git="(${colour}${branch}${PLAIN})"
+    git="(${colour}${branch}${DEFAULT_FORMAT})"
   fi
 
-  printf "${PLAIN}"
+  printf "${DEFAULT_FORMAT}"
 
-  printf "$_date ${_pwd/$HOME/\~}"
+  printf "${TIME_FORMAT}$_date${DEFAULT_FORMAT}"
+  printf " ${PATH_FORMAT}${_pwd/$HOME/\~}${DEFAULT_FORMAT}"
   if [ ! -z "$git" ]; then
     printf " $git"
   fi
-  printf " > "
+  printf " > ${PLAIN}"
 }
 
 PS1='$(_autil_prompt)'
