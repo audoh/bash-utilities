@@ -13,12 +13,11 @@ _autil_prompt() {
   PATH_FORMAT='\[\033[;35m\]'
 
   # prompt parts
-  local _date _pwd user git virtual_env
-
-
+  local _date _pwd
   _date="[$(date +%H:%M)]"
   _pwd=`pwd`
 
+  local user
   if [ ! -z "$SSH_TTY" ] || [ ! -z "$SSH_CLIENT" ]; then
     user="($USER@$(hostname))"
     # ssh, show user + system
@@ -27,6 +26,7 @@ _autil_prompt() {
     user="($USER)"
   fi
 
+  local git is_git_repo
   is_git_repo=`git rev-parse --is-inside-work-tree 2>&1`
   if [ "$is_git_repo" = "true" ]; then
     local has_uncommitted_changes branch colour
@@ -36,6 +36,7 @@ _autil_prompt() {
     if [ ! -z "$has_uncommitted_changes" ]; then
       colour="$RED"
     else
+      local has_unpushed_commits
       has_unpushed_commits=`git rev-list --left-only --count $branch...origin/$branch`
       if [ ! "$has_unpushed_commits" -eq "0" ]; then
         colour="$YELLOW"
@@ -45,8 +46,7 @@ _autil_prompt() {
     git="(${colour}${branch}${DEFAULT_FORMAT})"
   fi
 
-
-
+  local virtual_env
   if [ ! -z $VIRTUAL_ENV ]; then
     virtual_env="(`basename \"$VIRTUAL_ENV\"`)"
   fi
