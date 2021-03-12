@@ -6,4 +6,4 @@ if [ -z `which autil` ]; then
 fi
 source "$_dir/completer.sh"
 
-unset $_dir
+unset _dir
