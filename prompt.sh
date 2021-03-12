@@ -1,12 +1,20 @@
 _autil_prompt() {
+  # consts
+  local CYAN RED YELLOW PLAIN
   CYAN='\[\033[0;36m\]'
   RED='\[\033[0;31m\]'
   YELLOW='\[\033[0;33m\]'
   PLAIN='\[\033[0m\]'
 
+  # config
+  local DEFAULT_FORMAT TIME_FORMAT PATH_FORMAT
   DEFAULT_FORMAT='\[\033[1;37m\]'
   TIME_FORMAT='\[\033[1;37m\]'
   PATH_FORMAT='\[\033[;35m\]'
+
+  # prompt parts
+  local _date _pwd user git virtual_env
+
 
   _date="[$(date +%H:%M)]"
   _pwd=`pwd`
@@ -21,6 +29,7 @@ _autil_prompt() {
 
   is_git_repo=`git rev-parse --is-inside-work-tree 2>&1`
   if [ "$is_git_repo" = "true" ]; then
+    local has_uncommitted_changes branch colour
     branch=`git rev-parse --abbrev-ref HEAD`
     has_uncommitted_changes=`git status --porcelain`
     colour="$CYAN"
