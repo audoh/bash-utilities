@@ -1,8 +1,11 @@
 #!/bin/bash
-_dir="$(dirname "$BASH_SOURCE")"
+_autil_everything() {
+  local _dir
+  _dir="$(dirname "$BASH_SOURCE")"
+  source "$_dir/bash.sh"
+  source "$_dir/py.sh"
+  source "$_dir/git.sh"
+}
 
-source "$_dir/bash.sh"
-source "$_dir/py.sh"
-source "$_dir/git.sh"
-
-unset _dir
+_autil_everything
+unset _autil_everything

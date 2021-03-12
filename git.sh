@@ -1,4 +1,9 @@
 #!/bin/bash
-_dir="$(dirname "$BASH_SOURCE")"
-export PATH="$_dir/git:$PATH"
-unset _dir
+_autil_git() {
+  local _dir
+  _dir="$(dirname "$BASH_SOURCE")"
+  export PATH="$_dir/git:$PATH"
+}
+
+_autil_git
+unset _autil_git
