@@ -1,16 +1,19 @@
 #!/bin/bash
 
 genkey() {
+  local entropy
   entropy="${1:-16384}"
   openssl rand $entropy
 }
 
 encrypt() {
+  local key
   key="$1"
   openssl enc -aes-256-cbc -md sha512 -pbkdf2 -iter 100000 -salt -pass file:"$key"
 }
 
 decrypt() {
+  local key
   key="$1"
   openssl enc -d -aes-256-cbc -md sha512 -pbkdf2 -iter 100000 -salt -pass file:"$key"
 }
