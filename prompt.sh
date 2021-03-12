@@ -11,6 +11,14 @@ _autil_prompt() {
   _date="[$(date +%H:%M)]"
   _pwd=`pwd`
 
+  if [ ! -z "$SSH_TTY" ] || [ ! -z "$SSH_CLIENT" ]; then
+    user="($USER@$(hostname))"
+    # ssh, show user + system
+  elif [ `logname` != "$USER" ]; then
+    # su, show user only
+    user="($USER)"
+  fi
+
   is_git_repo=`git rev-parse --is-inside-work-tree 2>&1`
   if [ "$is_git_repo" = "true" ]; then
     branch=`git rev-parse --abbrev-ref HEAD`
@@ -28,6 +36,8 @@ _autil_prompt() {
     git="(${colour}${branch}${DEFAULT_FORMAT})"
   fi
 
+
+
   if [ ! -z $VIRTUAL_ENV ]; then
     virtual_env="(`basename \"$VIRTUAL_ENV\"`)"
   fi
@@ -35,6 +45,10 @@ _autil_prompt() {
   PS1="${DEFAULT_FORMAT}"
 
   PS1="$PS1${TIME_FORMAT}$_date${DEFAULT_FORMAT}"
+
+  if [ ! -z $user ]; then
+    PS1="$PS1 $user"
+  fi
 
   if [ ! -z "$virtual_env" ]; then
     PS1="$PS1 $virtual_env"
