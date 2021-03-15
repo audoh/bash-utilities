@@ -1,7 +1,6 @@
 #!/bin/bash
 
 env="${1:-.env}"
-echo loading $env
 set -o allexport;
 source "$env";
 set +o allexport
