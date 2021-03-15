@@ -69,7 +69,7 @@ _autil_prompt() {
     PS1="$PS1 $git"
   fi
 
-  PS1="$PS1 > ${PLAIN}"
+  PS1="\r$PS1 > ${PLAIN}"
 }
 
 export VIRTUAL_ENV_DISABLE_PROMPT=1
