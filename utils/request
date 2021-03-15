@@ -1,4 +1,4 @@
 #!/bin/bash
 
 dir="$(dirname "$BASH_SOURCE")"
-bash "$dir/../lib/request-file/bin/request-file.sh"
+bash "$dir/../lib/request-file/bin/request-file.sh" "$@"
