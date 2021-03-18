@@ -38,7 +38,7 @@ _autil_prompt() {
     else
       local has_unpushed_commits
       has_unpushed_commits=`git rev-list --left-only --count $branch...origin/$branch 2> /dev/null`
-      if [ ! "$has_unpushed_commits" -eq "0" ]; then
+      if [ ! "$has_unpushed_commits" -eq "0" ] 2> /dev/null; then
         colour="$YELLOW"
       fi
     fi
