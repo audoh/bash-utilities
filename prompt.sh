@@ -63,7 +63,10 @@ _autil_prompt() {
     PS1="$PS1 $virtual_env"
   fi
 
-  PS1="$PS1 ${PATH_FORMAT}${_pwd/$HOME/\~}${DEFAULT_FORMAT}"
+  if [[ "$_pwd" == "$HOME"* ]]; then
+    _pwd="~${_pwd#"$HOME"}"
+  fi
+  PS1="$PS1 ${PATH_FORMAT}${_pwd#"$HOME"}${DEFAULT_FORMAT}"
 
   if [ ! -z "$git" ]; then
     PS1="$PS1 $git"
