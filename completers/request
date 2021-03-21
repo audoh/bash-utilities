@@ -1,1 +1,4 @@
 #!/bin/bash
+
+dir="$(dirname "$BASH_SOURCE")"
+"$dir/../lib/request-file/bin/bash-completer.sh" "$@"
