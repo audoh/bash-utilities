@@ -1,5 +1,9 @@
 #!/bin/bash
 
 dir="$(dirname "$BASH_SOURCE")"
-( exec -a "autil request" "$dir/../lib/request-file/bin/request-file.bin" "$@" )
+if [ -n "$REQUESTFILE_SH" ]; then
+  bash "$dir/../lib/request-file/bin/request-file.sh" "$@"
+else
+  ( exec -a "autil request" "$dir/../lib/request-file/bin/request-file.bin" "$@" )
+fi
 unset dir
