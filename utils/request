@@ -1,5 +1,5 @@
 #!/bin/bash
 
 dir="$(dirname "$BASH_SOURCE")"
-bash "$dir/../lib/request-file/bin/request-file.sh" "$@"
+"$dir/../lib/request-file/bin/request-file.bin" "$@"
 unset dir
