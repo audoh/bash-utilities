@@ -1,11 +1,5 @@
 #!/bin/bash
 
 dir="$(dirname "$BASH_SOURCE")"
-timestamp=`date +%s%N`
-envfile="$dir/.request.${time}.env"
-bash "$dir/../lib/request-file/bin/request-file.sh" "$@" --exports "$envfile"
-if [ -f "$envfile" ]; then
-  autil env "$envfile"
-  rm -f "$envfile"
-fi
-unset dir timestamp envfile
+bash "$dir/../lib/request-file/bin/request-file.sh" "$@"
+unset dir
