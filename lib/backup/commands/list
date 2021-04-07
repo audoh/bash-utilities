@@ -1,0 +1,48 @@
+#!/bin/bash -e
+
+source "$(dirname "${BASH_SOURCE[0]}")/../lib"
+
+open() {
+  usage "$1" \
+"Lists available snapshots for a backup archive.
+
+Usage: $0 [options] [--] <file>
+
+Options:
+  -h, --help                   Display this help message and exit.
+"
+
+  local backup_path
+
+  # Parse args
+  local noopts=
+  while [ -n "$1" ]; do
+    arg="$1"; shift
+    if [ $noopts ]; then
+      expect_unset "backup" "$backup_path"
+      backup_path=("$(realpath -- "$arg")")
+    else
+      case "$arg" in
+        --)
+          noopts=1
+        ;;
+        *)
+          expect_noarg "$arg"
+          expect_unset "backup" "$backup_path"
+          backup_path=("$(realpath -- "$arg")")
+        ;;
+      esac
+    fi
+  done
+
+  if [ -z "$backup_path" ]; then
+    log "error: no backup specified"
+    echo "$USAGE"
+    exit 2
+  fi
+
+  # TODO
+  log NOT IMPLEMENTED
+}
+
+open "$@"

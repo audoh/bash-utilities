@@ -1,0 +1,145 @@
+#!/bin/bash -e
+
+source "$(dirname "${BASH_SOURCE[0]}")/../lib"
+
+create() {
+  usage "$1" \
+"Generate a backup archive.
+
+Usage: $(basename "$0") [options] -o <file> [--] <path>...
+
+Options:
+  -h, --help           Display this help message and exit.
+  -o, --out <file>     Path to the output file.
+  -b, --backup <file>  Path to an older backup file.
+  -k, --key <file>     Path to an encryption key.
+"
+
+  local input_paths=()
+  local output_paths=()
+  local backup_path
+  local key_path
+  local output_key_path
+
+  # Parse args
+  local noopts=
+  while [ -n "$1" ]; do
+    arg="$1"; shift
+    if [ $noopts ]; then
+      input_paths+=("$(realpath -- "$arg")")
+    else
+      case "$arg" in
+        -o|--out)
+          expect_operand "$arg" "$1"
+          output_paths+=("$(realpath -- "$1")"); shift
+        ;;
+        -b|--backup)
+          expect_operand "$arg" "$1"
+          expect_unset "$arg" "$key_path"
+          backup_path=("$(realpath -- "$1")"); shift
+        ;;
+        -k|--key)
+          expect_operand "$arg" "$1"
+          expect_unset "$arg" "$key_path"
+          key_path=("$(realpath -- "$1")"); shift
+        ;;
+        --)
+          noopts=1
+        ;;
+        *)
+          expect_noarg "$arg"
+          input_paths+=("$(realpath -- "$arg")")
+        ;;
+      esac
+    fi
+  done
+
+  if [ -z "$input_paths" ]; then
+    log "error: no files or folders specified"
+    echo "$USAGE"
+    exit 2
+  fi
+
+  if [ -z "$output_paths" ]; then
+    log "error: no output paths specified"
+    echo "$USAGE"
+    exit 2
+  fi
+
+  # Get a temp directory
+  local tmpdir="$(mktemp -d)"
+
+  log "input_paths=$(strarray "${input_paths[@]}"); output_paths=$(strarray "${output_paths[@]}"); backup_path='$backup_path'; key_path='$key_path'; tmpdir='$tmpdir'"
+
+  # Restore backup if provided
+  cd "$tmpdir"
+  if [ ! -z "$backup_path" ]; then
+    if [ ! -f "$backup_path" ]; then
+      log "warning: backup not found at '$backup_path'"
+    else
+      if [ ! -z "$key_path" ] && [ -f "$key_path" ]; then
+        log "decrypt+untar '$backup_path' => '$tmpdir'"
+        openssl enc -d -aes-256-cbc -md sha512 -pbkdf2 -iter 100000 -salt -pass file:"$key_path" -in "$backup_path" \
+          | tar -xz 2>&1 > /dev/null
+      else
+        log "untar '$backup_path' => '$tmpdir'"
+        tar -xzf -- "$backup_path" 2>&1 > /dev/null
+      fi
+    fi
+    regit
+  fi
+
+  log "git init"
+  git init -q 2>&1 > /dev/null
+  git config core.autocrlf false
+  git config core.safecrlf false
+
+  # Copy files/folders into temp directory
+  for path in "${input_paths[@]}"
+  do
+    local destpath="$tmpdir/$path"
+    local destdir="$(dirname "$destpath")"
+    log "rsync '$path' => '$destpath'"
+    mkdir -p -- "$destdir" 2>&1 > /dev/null
+    rsync -rl -- "$path" "$destpath"
+  done
+
+  # Commit to git
+  local has_uncommitted_changes=`git status --porcelain`
+  if [ -z "$has_uncommitted_changes" ]; then
+    log "no change"
+  else
+    log "git commit '$(date)'"
+    degit
+    git add .
+    git commit -qm "Backup updated $(date)"
+  fi
+
+  # Compress/encrypt
+  tarpath="$tmpdir.tar.gz"
+  if [ -z "$key_path" ]; then
+    log "tar '$tmpdir' => '$tarpath'"
+    tar -czf -- "$tarpath" * .git
+  else
+    if [ ! -f "$key_path" ]; then
+      log "generate $key_path"
+      openssl rand 1024 > "$key_path"
+    fi
+
+    tarpath="$tarpath.enc"
+    log "tar+encrypt '$tmpdir' => '$tarpath'"
+    tar -cz -- * .git \
+      | openssl enc -aes-256-cbc -md sha512 -pbkdf2 -iter 100000 -salt -pass file:"$key_path" -out "$tarpath"
+  fi
+
+  for path in "${output_paths[@]}"
+  do
+    log "copy '$tarpath' => '$path'"
+    cp -- "$tarpath" "$path"
+  done
+
+  log "remove '$tmpdir' '$tarpath'"
+  rm -rf -- "$tmpdir" "$tarpath"
+}
+
+create "$@"

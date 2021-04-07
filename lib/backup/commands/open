@@ -1,0 +1,70 @@
+#!/bin/bash -e
+
+source "$(dirname "${BASH_SOURCE[0]}")/../lib"
+
+open() {
+  usage "$1" \
+"Unpack a backup archive.
+
+Usage: $0 [options] -o <path> [--] <file>
+
+Options:
+  -h, --help                   Display this help message and exit.
+  -s, --snapshot <name>        Name of the snapshot to unpack. Defaults to the latest.
+  -o, --out <path>             Path to unpack to.
+  -k, --key <file>             Path to an encryption key.
+"
+
+  local snapshot
+  local backup_path
+  local output_paths=()
+
+  # Parse args
+  local noopts=
+  while [ -n "$1" ]; do
+    arg="$1"; shift
+    if [ $noopts ]; then
+      expect_unset "backup" "$backup_path"
+      backup_path=("$(realpath -- "$arg")")
+    else
+      case "$arg" in
+        -s|--snapshot)
+          expect_operand "$arg" "$1"
+          expect_unset "$arg" "$snapshot"
+          snapshot="$(realpath -- "$1")"; shift
+        ;;
+        -o|--out)
+          expect_operand "$arg" "$1"
+          output_paths+=("$(realpath -- "$arg")"); shift
+        ;;
+        --)
+          noopts=1
+        ;;
+        *)
+          expect_noarg "$arg"
+          expect_unset "backup" "$backup_path"
+          backup_path=("$(realpath -- "$arg")")
+        ;;
+      esac
+    fi
+  done
+
+  if [ -z "$backup_path" ]; then
+    log "error: no backup specified"
+    echo "$USAGE"
+    exit 2
+  fi
+
+  if [ -z "$output_paths" ]; then
+    log "error: no output paths specified"
+    echo "$USAGE"
+    exit 2
+  fi
+
+  log "backup_path='$backup_path'; output_paths=$(strarray "${output_paths[@]}"); snapshot='$snapshot'; key_path='$key_path'; tmpdir='$tmpdir'"
+
+  # TODO
+  log NOT IMPLEMENTED
+}
+
+open "$@"
