@@ -1,0 +1,62 @@
+#!/bin/bash
+
+strarray() {
+  printf "("
+  printf "'%s'" "$1"
+  shift 1
+  for arg do
+    printf " '%s'" "$arg"
+  done
+  printf ")"
+}
+
+log() {
+  # Log to stderr
+  echo $(basename "$0"): $@ >&2
+}
+
+expect_operand() {
+  # Expects an operand; used in arg parsing
+  if [ -z "$2" ]; then
+    log "error: '$1' missing operand"
+    echo "$USAGE"
+    exit 2
+  fi
+}
+
+expect_noarg() {
+  if [[ "$1" = -* ]]; then
+    log "error: unknown option '$1'"
+    echo "$USAGE"
+    exit 2
+  fi
+}
+
+expect_unset() {
+  if [ -n "$2" ]; then
+    log "error: cannot specify $1 more than once"
+    echo "$USAGE"
+    exit 2
+  fi
+}
+
+usage() {
+  USAGE="$2"
+  if [ "$1" = "-h" ] || [ "$1" = "--help" ] || [ ! -z "$error" ]; then
+    if [ ! -z "$error" ]; then
+      echo "$error"
+    fi
+    echo "$USAGE"
+    exit 0
+  fi
+}
+
+degit() {
+  # Converts all .git -> ..git so that git does not treat them as submodules
+  find ./* -type d -name .git | xargs dirname | xargs -I {} mv -- {}/.git {}/..git
+}
+
+regit() {
+  # Converts ..git back to .git; inverse of degit
+  find ./* -type d -name ..git | xargs dirname | xargs -I {} mv -- {}/..git {}/.git
+}

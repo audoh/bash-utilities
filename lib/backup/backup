@@ -1,0 +1,36 @@
+#!/bin/bash -e
+
+source "$(dirname "${BASH_SOURCE[0]}")/lib"
+
+command="$1"
+if [ -z "$command" ] || [ "$command" = "-h" ] || [ "$command" = "--help" ]; then
+  echo \
+"Create and manage backup archives.
+
+Usage: $(basename "$0") [options] <command> <args>...
+
+Commands:
+  create    Generate a backup archive.
+  open      Unpack a backup archive.
+  list      List available snapshots for a backup archive.
+
+Options:
+  -h, --help     Display this help message and exit.
+"
+  exit 0
+fi
+
+script_dir=$(dirname "${BASH_SOURCE[0]}")
+subcommand_dir="$script_dir/commands/"
+commands="$(ls "$subcommand_dir")"
+
+shift 1
+for valid_command in $commands; do
+  if [ "$command" = "$valid_command" ]; then
+    bash -ce ". '$script_dir/commands/$valid_command'" "$(basename "$0") $valid_command" "$@"
+    exit 0
+  fi
+done
+
+log unrecognised command: $command
+exit 1

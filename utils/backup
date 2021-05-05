@@ -1,0 +1,5 @@
+#!/bin/bash
+
+dir="$(dirname "$BASH_SOURCE")"
+bash -ce ". '$dir/../lib/backup/backup'" "autil backup" "$@"
+unset dir
