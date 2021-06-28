@@ -1,6 +1,8 @@
 #!/bin/bash
 
-env="${1:-.env}"
+_env="${1:-.env}"
 set -o allexport;
-source "$env";
-set +o allexport
+source "$_env";
+set +o allexport;
+echo autil: $_env: imported successfully >&2
+unset _env
