@@ -3,7 +3,7 @@
 _autil_index() {
   local _dir
   _dir="$(dirname "$BASH_SOURCE")"
-  if [ -z `which autil` ]; then
+  if alias autil 2> /dev/null; then
     alias autil="source \"$_dir/autil.sh\""
   fi
   source "$_dir/completer.sh"
