@@ -6,6 +6,7 @@ _autil_everything() {
   source "$_dir/py.sh"
   source "$_dir/git.sh"
   source "$_dir/copy.sh"
+  source "$_dir/vim.sh"
 }
 
 _autil_everything
