@@ -30,7 +30,7 @@ _autil_prompt() {
   is_git_repo=`git rev-parse --is-inside-work-tree 2>&1`
   if [ "$is_git_repo" = "true" ]; then
     local has_uncommitted_changes branch colour
-    branch=`git rev-parse --abbrev-ref HEAD`
+    branch=`git rev-parse --abbrev-ref HEAD 2> /dev/null`
     has_uncommitted_changes=`git status --porcelain`
     colour="$CYAN"
     if [ ! -z "$has_uncommitted_changes" ]; then
