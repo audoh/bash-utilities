@@ -21,7 +21,7 @@ _autil_prompt() {
   if [ ! -z "$SSH_TTY" ] || [ ! -z "$SSH_CLIENT" ]; then
     user="($USER@$(hostname))"
     # ssh, show user + system
-  elif [ `logname` != "$USER" ]; then
+  elif [ "`logname 2> /dev/null`" != "$USER" ]; then
     # su, show user only
     user="($USER)"
   fi
